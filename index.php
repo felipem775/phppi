@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta name="eiji" content="text/html;" http-equiv="content-type" charset="utf-8">
 	<title>eiji</title>
 
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
@@ -10,7 +11,7 @@
 	
 		function graficaTemperatura() {
 			var data = google.visualization.arrayToDataTable([
-				['x', 'temp C']
+				['x', 'temp ºC']
 				<?
 					$filename = "/var/log/temperatura.log";
 					$command = "tail -144 $filename";
@@ -32,8 +33,8 @@
 		        // Create and draw the visualization.
 			new google.visualization.LineChart(document.getElementById('visualizacionTemperatura')).
 				draw(data, {curveType: "function",
-				width: 900, height: 500,
-				vAxis: {minValue: 36, maxValue: 44}}
+				width: 700, height: 400,
+				vAxis: {minValue: 37, maxValue: 43}}
 			);
     }
       
@@ -43,7 +44,6 @@
 	</script>
 </head>
 <body>
-	Div para gráfica temperatura
-	<div id="visualizacionTemperatura" style="width: 900px; height: 500px;"></div>
+	<div id="visualizacionTemperatura" style="width: 700px; height: 400px;"></div>
 </body>
 </html>
