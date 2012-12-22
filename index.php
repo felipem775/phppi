@@ -52,21 +52,61 @@
 			data.addColumn('string', 'Topping');
 	    data.addColumn('number', 'Slices');
 	    data.addRows([
-				['Ocupado', <?php echo $ocupado?>],
-        ['Libre', <?php echo $libre?>]
+				['Used', <?php echo $ocupado?>],
+        ['Available', <?php echo $libre?>]
       ]);
-	    var options = {'title':'Disco USB', 'width':400, 'height':300};
+	    var options = {'title':'USB HDD', 'width':400, 'height':300};
 			var chart = new google.visualization.PieChart(document.getElementById('visualizacionEspacioUSB'));
       chart.draw(data, options);
 				
 		}      
-
+		<?php 
+			// http://arpaneting.es/2007/04/28/mostrando-el-uptime-con-php/
+			function format_uptime($seconds) {
+				$secs = intval($seconds % 60);
+				$mins = intval($seconds / 60 % 60);
+				$hours = intval($seconds / 3600 % 24);
+				$days = intval($seconds / 86400);
+				$uptimeString = "";
+				if ($days > 0) {
+					$uptimeString .= $days;
+					$uptimeString .= (($days == 1) ? " day" : " days");
+				}
+				
+				if ($hours > 0) {
+					$uptimeString .= (($days > 0) ? ", " : "") . $hours;
+					$uptimeString .= (($hours == 1) ? " hour" : " hours");
+				}
+				
+				if ($mins > 0) {
+					$uptimeString .= (($days > 0 || $hours > 0) ? ", " : "") . $mins;
+					$uptimeString .= (($mins == 1) ? " minute" : " minutes");
+				}
+				
+				if ($secs > 0) {
+				
+					$uptimeString .= (($days > 0 || $hours > 0 || $mins > 0) ? ", " : "") . $secs;
+					$uptimeString .= (($secs == 1) ? " second" : " seconds");
+				
+				}
+				return $uptimeString;
+			}
+		?>
+		function uptimeEiji() {
+			document.getElementById('visualizacionUptime').innerHTML = "uptime: <?php 
+					$commandSegundosUptime = "cat /proc/uptime |awk '{printf(\"%d\",$1);}'";
+					$segundosUptime = explode("\n", shell_exec($commandSegundosUptime));
+					print format_uptime($segundosUptime[0]);
+			?>"
+		} 
+		
 		google.setOnLoadCallback(graficaTemperatura);
 		google.setOnLoadCallback(graficoEspacioUSB);
-		
+		google.setOnLoadCallback(uptimeEiji);
 	</script>
 </head>
 <body>
+	<div id="visualizacionUptime" style="width: 700px; height: 40px;"></div>
 	<div id="visualizacionTemperatura" style="width: 700px; height: 400px;"></div>
 	<div id="visualizacionEspacioUSB" ></div>
 	
