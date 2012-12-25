@@ -1,4 +1,25 @@
+<?php 
+	// Registro de visitas
+	$pathRegistro = ("/var/log/eiji.log");
+	
+	$msg = array(
+			date("ymdGis",time())
+			, $_SERVER['REMOTE_ADDR']
+			, $_SERVER['HTTP_REFERER']
+			,$_SERVER['HTTP_ACCEPT_LANGUAGE']
+			,"\n" 
+		);
+	
+	
+	$fr= fopen($pathRegistro, "a");
+	fputs($fr ,
+		implode(";", $msg)
+	);
+	fclose($fr);
+?>
+
 <html>
+
 <head>
 	<meta name="eiji" content="text/html;" http-equiv="content-type" charset="utf-8">
 	<title>eiji</title>
